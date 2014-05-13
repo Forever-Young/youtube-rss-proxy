@@ -63,7 +63,11 @@ def rss_proxy(request, uuid):
         rss, content_type = get_rss(obj.username, obj.access_token)
     except InvalidToken:
         if obj.refresh_token:
-            obj.access_token = refresh_token(obj.refresh_token)
+            try:
+                obj.access_token = refresh_token(obj.refresh_token)
+            except InvalidToken:
+                obj.delete()
+                raise Http404
             obj.save()
             try:
                 rss, content_type = get_rss(obj.username, obj.access_token)

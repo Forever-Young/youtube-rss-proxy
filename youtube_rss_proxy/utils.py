@@ -29,7 +29,7 @@ def get_auth_url(state):
 
 
 def get_tokens(code):
-    r = requests.post("https://accounts.google.com//o/oauth2/token", {
+    r = requests.post("https://accounts.google.com/o/oauth2/token", {
         "code": code,
         "client_id": settings.GOOGLE_CLIENT_ID,
         "client_secret": settings.GOOGLE_CLIENT_SECRET,
@@ -39,14 +39,17 @@ def get_tokens(code):
     return r["access_token"], r.get("refresh_token", "")
 
 
-def refresh_token(refresh_token):
-    r = requests.post("https://accounts.google.com//o/oauth2/token", {
-        "refresh_token": refresh_token,
+def refresh_token(refr_token):
+    r = requests.post("https://accounts.google.com/o/oauth2/token", {
+        "refresh_token": refr_token,
         "client_id": settings.GOOGLE_CLIENT_ID,
         "client_secret": settings.GOOGLE_CLIENT_SECRET,
         "grant_type": "refresh_token",
     }).json()
-    return r["access_token"]
+    try:
+        return r["access_token"]
+    except KeyError:
+        raise InvalidToken
 
 
 def get_username(access_token):
