@@ -7,9 +7,11 @@ class Rss(models.Model):
     username = models.CharField(verbose_name="User name", max_length=255, blank=True, null=True)
     uuid = models.CharField(verbose_name="UUID", max_length=36)
     created_at = models.DateTimeField(verbose_name="Created", auto_now_add=True, blank=True, null=True)
+    last_access = models.DateTimeField(verbose_name="Last access", blank=True, null=True)
+    access_count = models.IntegerField(verbose_name="Access count", default=0)
 
     def __str__(self):
-        return str(self.username)
+        return str(self.uuid)
 
 
     class Meta:

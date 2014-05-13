@@ -1,5 +1,11 @@
 from django.contrib import admin
-from youtube_rss_proxy.models import Rss
+from .models import Rss
+from . import filters
 
 
-admin.site.register(Rss)
+class RssAdmin(admin.ModelAdmin):
+    search_fields = ('uuid',)
+    list_display = ('username', 'uuid', 'access_count', 'last_access')
+    list_filter = ('username',)
+
+admin.site.register(Rss, RssAdmin)

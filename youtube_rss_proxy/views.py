@@ -4,7 +4,9 @@ from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, RedirectView
 from youtube_rss_proxy.models import Rss
 from youtube_rss_proxy.utils import get_auth_url, get_tokens, refresh_token, get_rss, get_username, InvalidToken
+
 from uuid import uuid1
+from datetime import datetime
 
 
 class HomeView(TemplateView):
@@ -72,4 +74,7 @@ def rss_proxy(request, uuid):
         else:
             raise Http404
 
+    obj.access_count = obj.access_count + 1
+    obj.last_access = datetime.now()
+    obj.save()
     return HttpResponse(rss, content_type=content_type)
