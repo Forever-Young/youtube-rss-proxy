@@ -29,9 +29,9 @@ class OAuthCallbackView(TemplateView):
             obj.delete()
         else:
             if not obj.access_token:
-                access_token, refresh_token = get_tokens(self.request.GET["code"])
+                access_token, refr_token = get_tokens(self.request.GET["code"])
                 obj.access_token = access_token
-                obj.refresh_token = refresh_token
+                obj.refresh_token = refr_token
                 obj.save()
             if not obj.username:
                 try:
