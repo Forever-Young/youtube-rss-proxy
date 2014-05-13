@@ -3,9 +3,12 @@
 {% block title %}Youtube RSS proxy{% endblock %}
 
 {% block contents %}
-
-  <div class="form-group">
-    <label class="control-label" for="url">RSS url:</label>
-    <input id="url" class="form-control" readonly="" value="{{ url }}">
-  </div>
+  {% if error %}
+    <div class="alert alert-danger">Access denied, impossible to get RSS feed</div>
+  {% else %}
+    <div class="form-group">
+      <label class="control-label" for="url">RSS url:</label>
+      <input id="url" class="form-control" readonly="" value="{{ url }}">
+    </div>
+  {% endif %}
 {% endblock %}
