@@ -26,7 +26,6 @@ class OAuthCallbackView(TemplateView):
         obj = get_object_or_404(Rss, uuid=self.request.GET["state"])
         if self.request.GET.get("error") == "access_denied":
             context = {"error": True}
-            obj.delete()
         else:
             if not obj.access_token:
                 access_token, refr_token = get_tokens(self.request.GET["code"])
@@ -44,7 +43,6 @@ class OAuthCallbackView(TemplateView):
                             obj.username = get_username(obj.access_token)
                         except InvalidToken:
                             context = {"error": True}
-                            obj.delete()
                 else:
                     obj.save()
             context = {
@@ -57,7 +55,6 @@ class OAuthCallbackView(TemplateView):
 def rss_proxy(request, uuid):
     obj = get_object_or_404(Rss, uuid=uuid)
     if not obj.access_token:
-        obj.delete()
         raise Http404
     try:
         rss, content_type = get_rss(obj.username, obj.access_token)
@@ -66,16 +63,13 @@ def rss_proxy(request, uuid):
             try:
                 obj.access_token = refresh_token(obj.refresh_token)
             except InvalidToken:
-                obj.delete()
                 raise Http404
             obj.save()
             try:
                 rss, content_type = get_rss(obj.username, obj.access_token)
             except InvalidToken:
-                obj.delete()
                 raise Http404
         else:
-            obj.delete()
             raise Http404
 
     return HttpResponse(rss, content_type=content_type)
