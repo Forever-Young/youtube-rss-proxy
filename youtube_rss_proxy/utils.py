@@ -23,6 +23,8 @@ def get_auth_url(state):
         "redirect_uri": settings.GOOGLE_REDIRECT_URI,
         "scope": "https://www.googleapis.com/auth/youtube",
         "response_type": "code",
+        "access_type": "offline",
+        "approval_prompt": "force",
         "state": state,
     }))
 
