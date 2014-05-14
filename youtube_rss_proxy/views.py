@@ -29,24 +29,9 @@ class OAuthCallbackView(TemplateView):
         if self.request.GET.get("error") == "access_denied":
             context = {"error": True}
         else:
-            if not obj.access_token:
-                access_token, refr_token = get_tokens(self.request.GET["code"])
-                obj.access_token = access_token
-                obj.refresh_token = refr_token
-                obj.save()
-            if not obj.username:
-                try:
-                    obj.username = get_username(obj.access_token)
-                except InvalidToken:
-                    if obj.refresh_token:
-                        obj.access_token = refresh_token(obj.refresh_token)
-                        obj.save()
-                        try:
-                            obj.username = get_username(obj.access_token)
-                        except InvalidToken:
-                            context = {"error": True}
-                else:
-                    obj.save()
+            obj.access_token, obj.refresh_token = get_tokens(self.request.GET["code"])
+            obj.username = get_username(obj.access_token)
+            obj.save()
             context = {
                 "url": self.request.build_absolute_uri(reverse("rss-proxy", kwargs={"uuid": obj.uuid})),
             }
@@ -56,10 +41,10 @@ class OAuthCallbackView(TemplateView):
 
 def rss_proxy(request, uuid):
     obj = get_object_or_404(Rss, uuid=uuid)
-    if not obj.access_token:
+    if not obj.access_token and not obj.refresh_token:
         raise Http404
     try:
-        rss, content_type = get_rss(obj.username, obj.access_token)
+        rss, content_type = get_rss(obj.access_token)
     except InvalidToken:
         if obj.refresh_token:
             try:
@@ -68,7 +53,7 @@ def rss_proxy(request, uuid):
                 raise Http404
             obj.save()
             try:
-                rss, content_type = get_rss(obj.username, obj.access_token)
+                rss, content_type = get_rss(obj.access_token)
             except InvalidToken:
                 raise Http404
         else:
