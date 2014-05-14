@@ -17,3 +17,13 @@ class Rss(models.Model):
     class Meta:
         verbose_name = "RSS user feed"
         verbose_name_plural = "RSS user feeds"
+
+
+class Settings(models.Model):
+    access_token = models.CharField(verbose_name="Access Token", max_length=255, blank=True, null=True)
+    refresh_token = models.CharField(verbose_name="Refresh Token", max_length=255, blank=True, null=True)
+    last_access = models.DateTimeField(verbose_name="Last access", blank=True, null=True)
+    access_count = models.IntegerField(verbose_name="Access count", default=0)
+
+    class Meta:
+        verbose_name_plural = "Settings"

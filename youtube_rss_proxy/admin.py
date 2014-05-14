@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Rss
-from . import filters
+from .models import Rss, Settings
 
 
 class RssAdmin(admin.ModelAdmin):
@@ -9,3 +8,4 @@ class RssAdmin(admin.ModelAdmin):
     list_filter = ('username',)
 
 admin.site.register(Rss, RssAdmin)
+admin.site.register(Settings)

@@ -5,4 +5,8 @@
 {% block contents %}
   <h1>Youtube RSS proxy for new subscription videos</h1>
   <form action="{% url 'auth_redirect' %}" method="post"><button type="submit" class="btn btn-primary">Get URL</button></form>
+
+  <p></p><p>Or, you can just use <i>http://youtube-rss.f-y.name/user/&lt;username&gt;/</i> (but it may stop working!)</p>
+
+  <p>Also, you can add parameters after URL, like in <a href="https://developers.google.com/youtube/2.0/developers_guide_protocol_api_query_parameters">YouTube API docs</a>, for example <i>?prettyprint=true&fields=entry(link[@rel='alternate'](@href))</i></p>
 {% endblock %}
