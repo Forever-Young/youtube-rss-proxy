@@ -7,6 +7,7 @@
   <form action="{% url 'auth_redirect' %}" method="post"><button type="submit" class="btn btn-primary">Get URL</button></form>
 
   <p></p><p>Or, you can just use <i>http://youtube-rss.f-y.name/user/&lt;username&gt;/</i> (but it may stop working!)</p>
+  <p>If it doesn't work, check "Keep all my subscriptions private" in <a href="https://www.youtube.com/account_privacy">account privacy settings</a>, it must be off.</p>
 
   <p>Also, you can add parameters after URL, like in <a href="https://developers.google.com/youtube/2.0/developers_guide_protocol_api_query_parameters">YouTube API docs</a>, for example <i>?prettyprint=true&fields=entry(link[@rel='alternate'](@href))</i></p>
 {% endblock %}
