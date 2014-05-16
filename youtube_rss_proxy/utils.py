@@ -61,7 +61,9 @@ def get_username(access_token):
 
 
 def get_rss(access_token, query_string='', username='default'):
-    r = requests.get("https://gdata.youtube.com/feeds/api/users/{}/newsubscriptionvideos?{}".format(username, query_string), auth=OAuth(access_token))
-    if r.status_code == 401:
-        raise InvalidToken
+    r = requests.get("https://gdata.youtube.com/feeds/api/users/{}/newsubscriptionvideos?{}".format(username, query_string))
+    if r.status_code == 403:
+        r = requests.get("https://gdata.youtube.com/feeds/api/users/{}/newsubscriptionvideos?{}".format(username, query_string), auth=OAuth(access_token))
+        if r.status_code == 401:
+            raise InvalidToken
     return r.text, r.headers["Content-Type"]
